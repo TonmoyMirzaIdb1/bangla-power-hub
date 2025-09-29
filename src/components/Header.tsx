@@ -1,9 +1,11 @@
 import { Button } from "@/components/ui/button";
-import { Menu, X } from "lucide-react";
+import { Menu, X, LogOut, User } from "lucide-react";
 import { useState } from "react";
+import { useAuth } from "@/contexts/AuthContext";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { signOut, user } = useAuth();
 
   const navItems = [
     { name: "About", href: "#about" },
@@ -41,6 +43,20 @@ const Header = () => {
             ))}
           </nav>
 
+          {/* User Info and Sign Out */}
+          <div className="hidden md:flex items-center gap-4">
+            {user && (
+              <div className="flex items-center gap-2 text-sm">
+                <User className="w-4 h-4 text-primary" />
+                <span className="text-foreground">{user.email}</span>
+              </div>
+            )}
+            <Button variant="hero" size="sm" onClick={signOut} className="flex items-center gap-2">
+              <LogOut className="w-4 h-4" />
+              Sign Out
+            </Button>
+          </div>
+
           {/* Mobile menu button */}
           <Button
             variant="ghost"
@@ -55,6 +71,12 @@ const Header = () => {
         {/* Mobile Navigation */}
         {isMenuOpen && (
           <nav className="md:hidden py-4 border-t border-border">
+            {user && (
+              <div className="flex items-center gap-2 px-4 py-3 text-sm border-b border-border">
+                <User className="w-4 h-4 text-primary" />
+                <span className="text-foreground">{user.email}</span>
+              </div>
+            )}
             {navItems.map((item) => (
               <a
                 key={item.name}
@@ -65,6 +87,12 @@ const Header = () => {
                 {item.name}
               </a>
             ))}
+            <div className="px-4 py-3 border-t border-border">
+              <Button variant="hero" size="sm" onClick={signOut} className="w-full flex items-center justify-center gap-2">
+                <LogOut className="w-4 h-4" />
+                Sign Out
+              </Button>
+            </div>
           </nav>
         )}
       </div>
