@@ -14,7 +14,51 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string | null
+          department: Database["public"]["Enums"]["department"]
+          email: string
+          employee_id: string | null
+          full_name: string
+          hierarchy_level: number
+          id: string
+          is_active: boolean | null
+          phone: string | null
+          role: Database["public"]["Enums"]["user_role"]
+          updated_at: string | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string | null
+          department: Database["public"]["Enums"]["department"]
+          email: string
+          employee_id?: string | null
+          full_name: string
+          hierarchy_level: number
+          id: string
+          is_active?: boolean | null
+          phone?: string | null
+          role: Database["public"]["Enums"]["user_role"]
+          updated_at?: string | null
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string | null
+          department?: Database["public"]["Enums"]["department"]
+          email?: string
+          employee_id?: string | null
+          full_name?: string
+          hierarchy_level?: number
+          id?: string
+          is_active?: boolean | null
+          phone?: string | null
+          role?: Database["public"]["Enums"]["user_role"]
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -23,7 +67,98 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      department:
+        | "GENERATION"
+        | "TRANSMISSION"
+        | "DISTRIBUTION"
+        | "FINANCE & ACCOUNTS"
+        | "HUMAN RESOURCES"
+        | "PLANNING & DEVELOPMENT"
+        | "MAINTENANCE & ENGINEERING"
+        | "OPERATIONS & CONTROL"
+        | "INFORMATION TECHNOLOGY"
+        | "AUDIT & INSPECTION"
+        | "PROCUREMENT & LOGISTICS"
+        | "SAFETY & ENVIRONMENT"
+        | "LEGAL & REGULATORY"
+        | "CORPORATE AFFAIRS"
+        | "TRAINING & DEVELOPMENT"
+        | "QUALITY ASSURANCE"
+        | "PROJECT MANAGEMENT"
+        | "RESEARCH & DEVELOPMENT"
+        | "CUSTOMER SERVICES"
+        | "SECURITY SERVICES"
+        | "TRANSPORT & VEHICLE"
+        | "STORE & INVENTORY"
+        | "CONSTRUCTION & CIVIL"
+        | "ELECTRICAL MAINTENANCE"
+        | "MECHANICAL MAINTENANCE"
+        | "INSTRUMENTATION & CONTROL"
+        | "COMMUNICATION & TELECOM"
+        | "COAL HANDLING"
+        | "WATER TREATMENT"
+        | "LABORATORY SERVICES"
+        | "GENERAL ADMINISTRATION"
+      user_role:
+        | "Chairman"
+        | "Managing Director"
+        | "Director (Generation)"
+        | "Director (Transmission)"
+        | "Director (Distribution)"
+        | "Director (Finance)"
+        | "Director (HR)"
+        | "Director (Planning)"
+        | "GM Generation"
+        | "GM Transmission"
+        | "GM Distribution"
+        | "GM Finance"
+        | "GM HR"
+        | "GM Planning"
+        | "GM Operations"
+        | "GM Maintenance"
+        | "GM IT"
+        | "GM Audit"
+        | "DGM Generation"
+        | "DGM Transmission"
+        | "DGM Distribution"
+        | "DGM Finance"
+        | "DGM HR"
+        | "DGM Planning"
+        | "DGM Operations"
+        | "DGM Maintenance"
+        | "DGM IT"
+        | "AGM Generation"
+        | "AGM Transmission"
+        | "AGM Distribution"
+        | "AGM Finance"
+        | "Chief Engineer"
+        | "Senior Engineer (Electrical)"
+        | "Senior Engineer (Mechanical)"
+        | "Senior Engineer (Civil)"
+        | "Senior Engineer (Control & Instrumentation)"
+        | "Engineer (Electrical)"
+        | "Engineer (Mechanical)"
+        | "Engineer (Civil)"
+        | "Engineer (Control & Instrumentation)"
+        | "Engineer (Electronics)"
+        | "Assistant Engineer (Electrical)"
+        | "Assistant Engineer (Mechanical)"
+        | "Plant Operator"
+        | "Senior Plant Operator"
+        | "Control Room Operator"
+        | "Substation Operator"
+        | "Senior Technician"
+        | "Technician (Electrical)"
+        | "Technician (Mechanical)"
+        | "System Analyst"
+        | "Financial Officer"
+        | "HR Officer"
+        | "Planning Officer"
+        | "Operations Officer"
+        | "Maintenance Officer"
+        | "Safety Officer"
+        | "Security Officer"
+        | "Administrative Assistant"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +285,101 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      department: [
+        "GENERATION",
+        "TRANSMISSION",
+        "DISTRIBUTION",
+        "FINANCE & ACCOUNTS",
+        "HUMAN RESOURCES",
+        "PLANNING & DEVELOPMENT",
+        "MAINTENANCE & ENGINEERING",
+        "OPERATIONS & CONTROL",
+        "INFORMATION TECHNOLOGY",
+        "AUDIT & INSPECTION",
+        "PROCUREMENT & LOGISTICS",
+        "SAFETY & ENVIRONMENT",
+        "LEGAL & REGULATORY",
+        "CORPORATE AFFAIRS",
+        "TRAINING & DEVELOPMENT",
+        "QUALITY ASSURANCE",
+        "PROJECT MANAGEMENT",
+        "RESEARCH & DEVELOPMENT",
+        "CUSTOMER SERVICES",
+        "SECURITY SERVICES",
+        "TRANSPORT & VEHICLE",
+        "STORE & INVENTORY",
+        "CONSTRUCTION & CIVIL",
+        "ELECTRICAL MAINTENANCE",
+        "MECHANICAL MAINTENANCE",
+        "INSTRUMENTATION & CONTROL",
+        "COMMUNICATION & TELECOM",
+        "COAL HANDLING",
+        "WATER TREATMENT",
+        "LABORATORY SERVICES",
+        "GENERAL ADMINISTRATION",
+      ],
+      user_role: [
+        "Chairman",
+        "Managing Director",
+        "Director (Generation)",
+        "Director (Transmission)",
+        "Director (Distribution)",
+        "Director (Finance)",
+        "Director (HR)",
+        "Director (Planning)",
+        "GM Generation",
+        "GM Transmission",
+        "GM Distribution",
+        "GM Finance",
+        "GM HR",
+        "GM Planning",
+        "GM Operations",
+        "GM Maintenance",
+        "GM IT",
+        "GM Audit",
+        "DGM Generation",
+        "DGM Transmission",
+        "DGM Distribution",
+        "DGM Finance",
+        "DGM HR",
+        "DGM Planning",
+        "DGM Operations",
+        "DGM Maintenance",
+        "DGM IT",
+        "AGM Generation",
+        "AGM Transmission",
+        "AGM Distribution",
+        "AGM Finance",
+        "Chief Engineer",
+        "Senior Engineer (Electrical)",
+        "Senior Engineer (Mechanical)",
+        "Senior Engineer (Civil)",
+        "Senior Engineer (Control & Instrumentation)",
+        "Engineer (Electrical)",
+        "Engineer (Mechanical)",
+        "Engineer (Civil)",
+        "Engineer (Control & Instrumentation)",
+        "Engineer (Electronics)",
+        "Assistant Engineer (Electrical)",
+        "Assistant Engineer (Mechanical)",
+        "Plant Operator",
+        "Senior Plant Operator",
+        "Control Room Operator",
+        "Substation Operator",
+        "Senior Technician",
+        "Technician (Electrical)",
+        "Technician (Mechanical)",
+        "System Analyst",
+        "Financial Officer",
+        "HR Officer",
+        "Planning Officer",
+        "Operations Officer",
+        "Maintenance Officer",
+        "Safety Officer",
+        "Security Officer",
+        "Administrative Assistant",
+      ],
+    },
   },
 } as const
