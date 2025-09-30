@@ -43,6 +43,17 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     navigate('/auth');
   };
 
+  // Role-based redirect after login
+  useEffect(() => {
+    if (user && !loading) {
+      supabase.from('profiles').select('role').eq('id', user.id).single().then(({ data }) => {
+        if (data?.role === 'Chairman') navigate('/dashboard/chairman');
+        else if (data?.role?.includes('Director')) navigate('/dashboard/director');
+        else navigate('/dashboard/customer');
+      });
+    }
+  }, [user, loading, navigate]);
+
   return (
     <AuthContext.Provider value={{ user, session, signOut, loading }}>
       {children}
