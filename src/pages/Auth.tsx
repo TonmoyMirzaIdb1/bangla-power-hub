@@ -6,6 +6,8 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import { Eye, EyeOff, Zap } from 'lucide-react';
+import { QuickLogin } from '@/components/QuickLogin';
+import { useLanguage } from '@/contexts/LanguageContext';
 import {
   Select,
   SelectContent,
@@ -63,6 +65,7 @@ export default function Auth() {
   
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { t } = useLanguage();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -126,18 +129,23 @@ export default function Auth() {
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-white/20 backdrop-blur-sm mb-4">
             <Zap className="w-8 h-8 text-white" />
           </div>
-          <h1 className="text-3xl font-bold text-white mb-2">Bangladesh Power Development Board</h1>
-          <p className="text-white/80">Powering the Nation</p>
+          <h1 className="text-3xl font-bold text-white mb-2">{t('auth.welcome')}</h1>
+          <p className="text-white/80">{t('auth.tagline')}</p>
+        </div>
+
+        {/* Quick Login Component */}
+        <div className="mb-6">
+          <QuickLogin />
         </div>
 
         {/* Glassmorphism Card */}
         <div className="bg-white/10 backdrop-blur-xl rounded-2xl p-8 shadow-2xl border border-white/20">
           <div className="mb-6">
             <h2 className="text-2xl font-bold text-white mb-2">
-              {isLogin ? 'Welcome Back' : 'Create Account'}
+              {isLogin ? t('auth.welcomeBack') : t('auth.createAccount')}
             </h2>
             <p className="text-white/70">
-              {isLogin ? 'Enter your credentials to access your dashboard' : 'Register to access the BPDB portal'}
+              {isLogin ? t('auth.loginDesc') : t('auth.registerDesc')}
             </p>
           </div>
 
@@ -145,7 +153,7 @@ export default function Auth() {
             {!isLogin && (
               <>
                 <div className="space-y-2">
-                  <Label htmlFor="fullName" className="text-white">Full Name</Label>
+                  <Label htmlFor="fullName" className="text-white">{t('auth.fullName')}</Label>
                   <Input
                     id="fullName"
                     type="text"
@@ -153,12 +161,12 @@ export default function Auth() {
                     value={formData.fullName}
                     onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
                     className="bg-white/10 border-white/20 text-white placeholder:text-white/50 focus:bg-white/20"
-                    placeholder="Enter your full name"
+                    placeholder={t('auth.fullName')}
                   />
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="role" className="text-white">Role</Label>
+                  <Label htmlFor="role" className="text-white">{t('auth.role')}</Label>
                   <Select
                     value={formData.role}
                     onValueChange={(value) => setFormData({ ...formData, role: value })}
@@ -178,7 +186,7 @@ export default function Auth() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="department" className="text-white">Department</Label>
+                  <Label htmlFor="department" className="text-white">{t('auth.department')}</Label>
                   <Select
                     value={formData.department}
                     onValueChange={(value) => setFormData({ ...formData, department: value })}
@@ -198,7 +206,7 @@ export default function Auth() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="hierarchyLevel" className="text-white">Hierarchy Level (1-10)</Label>
+                  <Label htmlFor="hierarchyLevel" className="text-white">{t('auth.hierarchyLevel')}</Label>
                   <Input
                     id="hierarchyLevel"
                     type="number"
@@ -212,7 +220,7 @@ export default function Auth() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="phone" className="text-white">Phone (Optional)</Label>
+                  <Label htmlFor="phone" className="text-white">{t('auth.phone')}</Label>
                   <Input
                     id="phone"
                     type="tel"
@@ -226,7 +234,7 @@ export default function Auth() {
             )}
 
             <div className="space-y-2">
-              <Label htmlFor="email" className="text-white">Email</Label>
+              <Label htmlFor="email" className="text-white">{t('auth.email')}</Label>
               <Input
                 id="email"
                 type="email"
@@ -239,7 +247,7 @@ export default function Auth() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="password" className="text-white">Password</Label>
+              <Label htmlFor="password" className="text-white">{t('auth.password')}</Label>
               <div className="relative">
                 <Input
                   id="password"
@@ -265,7 +273,7 @@ export default function Auth() {
               disabled={loading}
               className="w-full bg-white text-primary hover:bg-white/90 font-semibold"
             >
-              {loading ? 'Processing...' : isLogin ? 'Sign In' : 'Create Account'}
+              {loading ? t('auth.processing') : isLogin ? t('auth.signIn') : t('auth.createAccount')}
             </Button>
           </form>
 
@@ -275,7 +283,7 @@ export default function Auth() {
               onClick={() => setIsLogin(!isLogin)}
               className="text-white/80 hover:text-white text-sm"
             >
-              {isLogin ? "Don't have an account? Sign up" : 'Already have an account? Sign in'}
+              {isLogin ? t('auth.noAccount') : t('auth.hasAccount')}
             </button>
           </div>
         </div>
