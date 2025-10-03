@@ -20,6 +20,9 @@ import AGMDashboard from "./pages/dashboards/AGMDashboard";
 import EngineerDashboard from "./pages/dashboards/EngineerDashboard";
 import OperatorDashboard from "./pages/dashboards/OperatorDashboard";
 import OfficerDashboard from "./pages/dashboards/OfficerDashboard";
+import ChiefEngineerDashboard from "./pages/dashboards/ChiefEngineerDashboard";
+import SystemAnalystDashboard from "./pages/dashboards/SystemAnalystDashboard";
+import TechnicianDashboard from "./pages/dashboards/TechnicianDashboard";
 
 const queryClient = new QueryClient();
 
@@ -46,7 +49,10 @@ const App = () => (
                 <Route path="/dashboard/gm/:department" element={<ProtectedRoute><GMDashboard /></ProtectedRoute>} />
                 <Route path="/dashboard/dgm/:department" element={<ProtectedRoute><DGMDashboard /></ProtectedRoute>} />
                 <Route path="/dashboard/agm/:department" element={<ProtectedRoute><AGMDashboard /></ProtectedRoute>} />
+                <Route path="/dashboard/chief-engineer" element={<ProtectedRoute><ChiefEngineerDashboard /></ProtectedRoute>} />
                 <Route path="/dashboard/engineer/:specialization" element={<ProtectedRoute><EngineerDashboard /></ProtectedRoute>} />
+                <Route path="/dashboard/system-analyst" element={<ProtectedRoute><SystemAnalystDashboard /></ProtectedRoute>} />
+                <Route path="/dashboard/technician/:specialization" element={<ProtectedRoute><TechnicianDashboard /></ProtectedRoute>} />
                 <Route path="/dashboard/operator/:type" element={<ProtectedRoute><OperatorDashboard /></ProtectedRoute>} />
                 <Route path="/dashboard/officer/:department" element={<ProtectedRoute><OfficerDashboard /></ProtectedRoute>} />
                 <Route path="/dashboard/customer" element={<ProtectedRoute><CustomerDashboard /></ProtectedRoute>} />

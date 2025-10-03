@@ -2,33 +2,32 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Activity, TrendingUp, AlertCircle, CheckCircle } from "lucide-react";
 import { DashboardLayout } from "@/components/DashboardLayout";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useParams } from "react-router-dom";
 
-interface GMDashboardProps {
-  department?: string;
-}
-
-const GMDashboard = ({ department = "Operations" }: GMDashboardProps) => {
+const GMDashboard = () => {
   const { t } = useLanguage();
+  const { department = "operations" } = useParams<{ department: string }>();
+  const deptName = department.charAt(0).toUpperCase() + department.slice(1);
 
   const getDepartmentMetrics = () => {
-    switch(department) {
-      case "Generation":
+    switch(department.toLowerCase()) {
+      case "generation":
         return { title: "GM Generation", metric1: "8,750 MW", metric2: "94.2%", metric3: "32 Plants" };
-      case "Transmission":
+      case "transmission":
         return { title: "GM Transmission", metric1: "12,450 MW", metric2: "96.1%", metric3: "248 Lines" };
-      case "Distribution":
+      case "distribution":
         return { title: "GM Distribution", metric1: "11,200 MW", metric2: "92.8%", metric3: "1,542 Feeders" };
-      case "Finance":
+      case "finance":
         return { title: "GM Finance", metric1: "৳45,250 Cr", metric2: "87%", metric3: "Q4 FY2025" };
-      case "HR":
+      case "hr":
         return { title: "GM HR", metric1: "16,842", metric2: "94.5%", metric3: "1,240 Trained" };
-      case "Planning":
+      case "planning":
         return { title: "GM Planning", metric1: "24 Projects", metric2: "78%", metric3: "৳12,500 Cr" };
-      case "Maintenance":
+      case "maintenance":
         return { title: "GM Maintenance", metric1: "96.5%", metric2: "142 Units", metric3: "24/7 Active" };
-      case "IT":
+      case "it":
         return { title: "GM IT", metric1: "99.2%", metric2: "32 Systems", metric3: "Zero Breaches" };
-      case "Audit":
+      case "audit":
         return { title: "GM Audit", metric1: "48 Audits", metric2: "96%", metric3: "12 Pending" };
       default:
         return { title: "GM Operations", metric1: "98.5%", metric2: "All Systems", metric3: "Active" };
@@ -38,7 +37,7 @@ const GMDashboard = ({ department = "Operations" }: GMDashboardProps) => {
   const metrics = getDepartmentMetrics();
 
   return (
-    <DashboardLayout role={`GM ${department}`}>
+    <DashboardLayout role={`GM ${deptName}`}>
       <div className="container mx-auto px-4 py-8">
         <div className="mb-8">
           <h1 className="text-4xl font-bold text-foreground mb-2">{metrics.title} Dashboard</h1>

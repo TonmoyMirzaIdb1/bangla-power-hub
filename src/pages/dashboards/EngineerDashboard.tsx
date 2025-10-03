@@ -2,20 +2,19 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Wrench, AlertTriangle, CheckCircle, Clock } from "lucide-react";
 import { DashboardLayout } from "@/components/DashboardLayout";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useParams } from "react-router-dom";
 
-interface EngineerDashboardProps {
-  role?: string;
-  specialization?: string;
-}
-
-const EngineerDashboard = ({ role = "Engineer", specialization = "Electrical" }: EngineerDashboardProps) => {
+const EngineerDashboard = () => {
   const { t } = useLanguage();
+  const { specialization = "general" } = useParams<{ specialization: string }>();
+  const specName = specialization.charAt(0).toUpperCase() + specialization.slice(1);
+  const role = "Engineer";
 
   return (
-    <DashboardLayout role={`${role} (${specialization})`}>
+    <DashboardLayout role={`${role} (${specName})`}>
       <div className="container mx-auto px-4 py-8">
         <div className="mb-8">
-          <h1 className="text-4xl font-bold text-foreground mb-2">{role} ({specialization}) Dashboard</h1>
+          <h1 className="text-4xl font-bold text-foreground mb-2">{role} ({specName}) Dashboard</h1>
           <p className="text-muted-foreground">Technical operations and maintenance</p>
         </div>
 

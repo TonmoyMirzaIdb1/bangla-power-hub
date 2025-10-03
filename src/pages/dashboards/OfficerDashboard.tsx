@@ -2,19 +2,18 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { FileText, Users, TrendingUp, CheckCircle } from "lucide-react";
 import { DashboardLayout } from "@/components/DashboardLayout";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useParams } from "react-router-dom";
 
-interface OfficerDashboardProps {
-  department?: string;
-}
-
-const OfficerDashboard = ({ department = "Administrative" }: OfficerDashboardProps) => {
+const OfficerDashboard = () => {
   const { t } = useLanguage();
+  const { department = "administrative" } = useParams<{ department: string }>();
+  const deptName = department.charAt(0).toUpperCase() + department.slice(1);
 
   return (
-    <DashboardLayout role={`${department} Officer`}>
+    <DashboardLayout role={`${deptName} Officer`}>
       <div className="container mx-auto px-4 py-8">
         <div className="mb-8">
-          <h1 className="text-4xl font-bold text-foreground mb-2">{department} Officer Dashboard</h1>
+          <h1 className="text-4xl font-bold text-foreground mb-2">{deptName} Officer Dashboard</h1>
           <p className="text-muted-foreground">Department support and coordination</p>
         </div>
 

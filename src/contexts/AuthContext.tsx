@@ -80,13 +80,31 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           navigate(`/dashboard/agm/${dept}`);
         }
         
-        // Engineer level
-        else if (role.includes('Engineer')) {
+        // Chief Engineer
+        else if (role === 'Chief Engineer') {
+          navigate('/dashboard/chief-engineer');
+        }
+        
+        // Engineer level (Senior, Regular, Assistant)
+        else if (role.includes('Engineer') && !role.includes('Chief')) {
           const specialization = role.includes('Electrical') ? 'electrical' :
                                 role.includes('Mechanical') ? 'mechanical' :
                                 role.includes('Civil') ? 'civil' :
-                                role.includes('Control') ? 'control' : 'general';
+                                role.includes('Control') || role.includes('Instrumentation') ? 'control' :
+                                role.includes('Electronics') ? 'electronics' : 'general';
           navigate(`/dashboard/engineer/${specialization}`);
+        }
+        
+        // System Analyst
+        else if (role === 'System Analyst') {
+          navigate('/dashboard/system-analyst');
+        }
+        
+        // Technician level
+        else if (role.includes('Technician')) {
+          const specialization = role.includes('Electrical') ? 'electrical' :
+                                role.includes('Mechanical') ? 'mechanical' : 'general';
+          navigate(`/dashboard/technician/${specialization}`);
         }
         
         // Operator level

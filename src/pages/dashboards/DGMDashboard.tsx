@@ -2,20 +2,19 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Activity, FileText, Users, TrendingUp } from "lucide-react";
 import { DashboardLayout } from "@/components/DashboardLayout";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useParams } from "react-router-dom";
 
-interface DGMDashboardProps {
-  department?: string;
-}
-
-const DGMDashboard = ({ department = "Operations" }: DGMDashboardProps) => {
+const DGMDashboard = () => {
   const { t } = useLanguage();
+  const { department = "operations" } = useParams<{ department: string }>();
+  const deptName = department.charAt(0).toUpperCase() + department.slice(1);
 
   return (
-    <DashboardLayout role={`DGM ${department}`}>
+    <DashboardLayout role={`DGM ${deptName}`}>
       <div className="container mx-auto px-4 py-8">
         <div className="mb-8">
-          <h1 className="text-4xl font-bold text-foreground mb-2">DGM {department} Dashboard</h1>
-          <p className="text-muted-foreground">Deputy General Manager - {department}</p>
+          <h1 className="text-4xl font-bold text-foreground mb-2">DGM {deptName} Dashboard</h1>
+          <p className="text-muted-foreground">Deputy General Manager - {deptName}</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">

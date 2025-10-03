@@ -2,13 +2,14 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Activity, Gauge, AlertCircle, Power } from "lucide-react";
 import { DashboardLayout } from "@/components/DashboardLayout";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useParams } from "react-router-dom";
 
-interface OperatorDashboardProps {
-  role?: string;
-}
-
-const OperatorDashboard = ({ role = "Plant Operator" }: OperatorDashboardProps) => {
+const OperatorDashboard = () => {
   const { t } = useLanguage();
+  const { type = "plant" } = useParams<{ type: string }>();
+  const role = type === "plant" ? "Plant Operator" :
+               type === "control-room" ? "Control Room Operator" :
+               type === "substation" ? "Substation Operator" : "Operator";
 
   return (
     <DashboardLayout role={role}>
