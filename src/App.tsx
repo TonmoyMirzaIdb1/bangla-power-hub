@@ -13,6 +13,13 @@ import NotFound from "./pages/NotFound";
 import ChairmanDashboard from "./pages/dashboards/ChairmanDashboard";
 import DirectorDashboard from "./pages/dashboards/DirectorDashboard";
 import CustomerDashboard from "./pages/dashboards/CustomerDashboard";
+import ManagingDirectorDashboard from "./pages/dashboards/ManagingDirectorDashboard";
+import GMDashboard from "./pages/dashboards/GMDashboard";
+import DGMDashboard from "./pages/dashboards/DGMDashboard";
+import AGMDashboard from "./pages/dashboards/AGMDashboard";
+import EngineerDashboard from "./pages/dashboards/EngineerDashboard";
+import OperatorDashboard from "./pages/dashboards/OperatorDashboard";
+import OfficerDashboard from "./pages/dashboards/OfficerDashboard";
 
 const queryClient = new QueryClient();
 
@@ -29,7 +36,19 @@ const App = () => (
                 <Route path="/auth" element={<Auth />} />
                 <Route path="/" element={<ProtectedRoute><Index /></ProtectedRoute>} />
                 <Route path="/dashboard/chairman" element={<ProtectedRoute><ChairmanDashboard /></ProtectedRoute>} />
-                <Route path="/dashboard/director" element={<ProtectedRoute><DirectorDashboard /></ProtectedRoute>} />
+                <Route path="/dashboard/managing-director" element={<ProtectedRoute><ManagingDirectorDashboard /></ProtectedRoute>} />
+                <Route path="/dashboard/director/generation" element={<ProtectedRoute><DirectorDashboard /></ProtectedRoute>} />
+                <Route path="/dashboard/director/transmission" element={<ProtectedRoute><DirectorDashboard /></ProtectedRoute>} />
+                <Route path="/dashboard/director/distribution" element={<ProtectedRoute><DirectorDashboard /></ProtectedRoute>} />
+                <Route path="/dashboard/director/finance" element={<ProtectedRoute><DirectorDashboard /></ProtectedRoute>} />
+                <Route path="/dashboard/director/hr" element={<ProtectedRoute><DirectorDashboard /></ProtectedRoute>} />
+                <Route path="/dashboard/director/planning" element={<ProtectedRoute><DirectorDashboard /></ProtectedRoute>} />
+                <Route path="/dashboard/gm/:department" element={<ProtectedRoute><GMDashboard /></ProtectedRoute>} />
+                <Route path="/dashboard/dgm/:department" element={<ProtectedRoute><DGMDashboard /></ProtectedRoute>} />
+                <Route path="/dashboard/agm/:department" element={<ProtectedRoute><AGMDashboard /></ProtectedRoute>} />
+                <Route path="/dashboard/engineer/:specialization" element={<ProtectedRoute><EngineerDashboard /></ProtectedRoute>} />
+                <Route path="/dashboard/operator/:type" element={<ProtectedRoute><OperatorDashboard /></ProtectedRoute>} />
+                <Route path="/dashboard/officer/:department" element={<ProtectedRoute><OfficerDashboard /></ProtectedRoute>} />
                 <Route path="/dashboard/customer" element={<ProtectedRoute><CustomerDashboard /></ProtectedRoute>} />
                 <Route path="*" element={<NotFound />} />
               </Routes>

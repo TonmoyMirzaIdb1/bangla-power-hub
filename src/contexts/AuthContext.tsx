@@ -47,8 +47,68 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     if (user && !loading) {
       supabase.from('profiles').select('role').eq('id', user.id).single().then(({ data }) => {
-        if (data?.role === 'Chairman') navigate('/dashboard/chairman');
-        else if (data?.role?.includes('Director')) navigate('/dashboard/director');
+        const role = data?.role;
+        if (!role) return;
+        
+        // Executive level
+        if (role === 'Chairman') navigate('/dashboard/chairman');
+        else if (role === 'Managing Director') navigate('/dashboard/managing-director');
+        
+        // Director level
+        else if (role === 'Director (Generation)') navigate('/dashboard/director/generation');
+        else if (role === 'Director (Transmission)') navigate('/dashboard/director/transmission');
+        else if (role === 'Director (Distribution)') navigate('/dashboard/director/distribution');
+        else if (role === 'Director (Finance)') navigate('/dashboard/director/finance');
+        else if (role === 'Director (HR)') navigate('/dashboard/director/hr');
+        else if (role === 'Director (Planning)') navigate('/dashboard/director/planning');
+        
+        // GM level
+        else if (role.startsWith('GM ')) {
+          const dept = role.replace('GM ', '').toLowerCase();
+          navigate(`/dashboard/gm/${dept}`);
+        }
+        
+        // DGM level
+        else if (role.startsWith('DGM ')) {
+          const dept = role.replace('DGM ', '').toLowerCase();
+          navigate(`/dashboard/dgm/${dept}`);
+        }
+        
+        // AGM level
+        else if (role.startsWith('AGM ')) {
+          const dept = role.replace('AGM ', '').toLowerCase();
+          navigate(`/dashboard/agm/${dept}`);
+        }
+        
+        // Engineer level
+        else if (role.includes('Engineer')) {
+          const specialization = role.includes('Electrical') ? 'electrical' :
+                                role.includes('Mechanical') ? 'mechanical' :
+                                role.includes('Civil') ? 'civil' :
+                                role.includes('Control') ? 'control' : 'general';
+          navigate(`/dashboard/engineer/${specialization}`);
+        }
+        
+        // Operator level
+        else if (role.includes('Operator')) {
+          const type = role.includes('Plant') ? 'plant' :
+                      role.includes('Control Room') ? 'control-room' :
+                      role.includes('Substation') ? 'substation' : 'general';
+          navigate(`/dashboard/operator/${type}`);
+        }
+        
+        // Officer level
+        else if (role.includes('Officer')) {
+          const dept = role.replace(' Officer', '').toLowerCase();
+          navigate(`/dashboard/officer/${dept}`);
+        }
+        
+        // Technician and support staff
+        else if (role.includes('Technician') || role.includes('Assistant')) {
+          navigate(`/dashboard/officer/technical`);
+        }
+        
+        // Customer
         else navigate('/dashboard/customer');
       });
     }
