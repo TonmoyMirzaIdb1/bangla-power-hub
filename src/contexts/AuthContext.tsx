@@ -46,7 +46,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   // Role-based redirect after login
   useEffect(() => {
     if (user && !loading) {
-      supabase.from('profiles').select('role').eq('id', user.id).single().then(({ data }) => {
+      supabase.from('user_roles').select('role').eq('user_id', user.id).single().then(({ data }) => {
         const role = data?.role;
         if (!role) return;
         

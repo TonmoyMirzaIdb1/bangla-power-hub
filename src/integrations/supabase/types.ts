@@ -14,6 +14,200 @@ export type Database = {
   }
   public: {
     Tables: {
+      customer_bills: {
+        Row: {
+          amount_bdt: number
+          billing_month: string
+          consumption_kwh: number
+          created_at: string | null
+          customer_id: string
+          due_date: string
+          id: string
+          paid: boolean | null
+          paid_at: string | null
+        }
+        Insert: {
+          amount_bdt: number
+          billing_month: string
+          consumption_kwh: number
+          created_at?: string | null
+          customer_id: string
+          due_date: string
+          id?: string
+          paid?: boolean | null
+          paid_at?: string | null
+        }
+        Update: {
+          amount_bdt?: number
+          billing_month?: string
+          consumption_kwh?: number
+          created_at?: string | null
+          customer_id?: string
+          due_date?: string
+          id?: string
+          paid?: boolean | null
+          paid_at?: string | null
+        }
+        Relationships: []
+      }
+      distribution_data: {
+        Row: {
+          created_at: string | null
+          customers_affected: number | null
+          feeder_name: string
+          id: string
+          load_mw: number
+          outage_duration_minutes: number | null
+          recorded_by: string | null
+          region: string | null
+          status: string | null
+          timestamp: string | null
+          voltage_kv: number | null
+        }
+        Insert: {
+          created_at?: string | null
+          customers_affected?: number | null
+          feeder_name: string
+          id?: string
+          load_mw: number
+          outage_duration_minutes?: number | null
+          recorded_by?: string | null
+          region?: string | null
+          status?: string | null
+          timestamp?: string | null
+          voltage_kv?: number | null
+        }
+        Update: {
+          created_at?: string | null
+          customers_affected?: number | null
+          feeder_name?: string
+          id?: string
+          load_mw?: number
+          outage_duration_minutes?: number | null
+          recorded_by?: string | null
+          region?: string | null
+          status?: string | null
+          timestamp?: string | null
+          voltage_kv?: number | null
+        }
+        Relationships: []
+      }
+      generation_data: {
+        Row: {
+          created_at: string | null
+          efficiency_percent: number | null
+          fuel_consumption: number | null
+          id: string
+          output_mw: number
+          plant_id: string | null
+          recorded_by: string | null
+          status: string | null
+          timestamp: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          efficiency_percent?: number | null
+          fuel_consumption?: number | null
+          id?: string
+          output_mw: number
+          plant_id?: string | null
+          recorded_by?: string | null
+          status?: string | null
+          timestamp?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          efficiency_percent?: number | null
+          fuel_consumption?: number | null
+          id?: string
+          output_mw?: number
+          plant_id?: string | null
+          recorded_by?: string | null
+          status?: string | null
+          timestamp?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "generation_data_plant_id_fkey"
+            columns: ["plant_id"]
+            isOneToOne: false
+            referencedRelation: "power_plants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      incidents: {
+        Row: {
+          assigned_to: string | null
+          created_at: string | null
+          description: string
+          id: string
+          incident_type: string
+          location: string | null
+          reported_by: string
+          resolved_at: string | null
+          severity: string
+          status: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          assigned_to?: string | null
+          created_at?: string | null
+          description: string
+          id?: string
+          incident_type: string
+          location?: string | null
+          reported_by: string
+          resolved_at?: string | null
+          severity: string
+          status?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          assigned_to?: string | null
+          created_at?: string | null
+          description?: string
+          id?: string
+          incident_type?: string
+          location?: string | null
+          reported_by?: string
+          resolved_at?: string | null
+          severity?: string
+          status?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      power_plants: {
+        Row: {
+          capacity_mw: number
+          created_at: string | null
+          fuel_type: string | null
+          id: string
+          is_active: boolean | null
+          location: string | null
+          name: string
+        }
+        Insert: {
+          capacity_mw: number
+          created_at?: string | null
+          fuel_type?: string | null
+          id?: string
+          is_active?: boolean | null
+          location?: string | null
+          name: string
+        }
+        Update: {
+          capacity_mw?: number
+          created_at?: string | null
+          fuel_type?: string | null
+          id?: string
+          is_active?: boolean | null
+          location?: string | null
+          name?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -21,6 +215,8 @@ export type Database = {
           department: Database["public"]["Enums"]["department"]
           email: string
           employee_id: string | null
+          facility_id: string | null
+          facility_type: string | null
           full_name: string
           hierarchy_level: number
           id: string
@@ -35,6 +231,8 @@ export type Database = {
           department: Database["public"]["Enums"]["department"]
           email: string
           employee_id?: string | null
+          facility_id?: string | null
+          facility_type?: string | null
           full_name: string
           hierarchy_level: number
           id: string
@@ -49,6 +247,8 @@ export type Database = {
           department?: Database["public"]["Enums"]["department"]
           email?: string
           employee_id?: string | null
+          facility_id?: string | null
+          facility_type?: string | null
           full_name?: string
           hierarchy_level?: number
           id?: string
@@ -59,14 +259,225 @@ export type Database = {
         }
         Relationships: []
       }
+      service_requests: {
+        Row: {
+          assigned_to: string | null
+          created_at: string | null
+          customer_id: string
+          description: string | null
+          id: string
+          priority: string | null
+          request_type: string
+          resolved_at: string | null
+          status: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          assigned_to?: string | null
+          created_at?: string | null
+          customer_id: string
+          description?: string | null
+          id?: string
+          priority?: string | null
+          request_type: string
+          resolved_at?: string | null
+          status?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          assigned_to?: string | null
+          created_at?: string | null
+          customer_id?: string
+          description?: string | null
+          id?: string
+          priority?: string | null
+          request_type?: string
+          resolved_at?: string | null
+          status?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      substations: {
+        Row: {
+          capacity_mva: number
+          created_at: string | null
+          id: string
+          is_active: boolean | null
+          location: string | null
+          name: string
+          voltage_level: string | null
+        }
+        Insert: {
+          capacity_mva: number
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          location?: string | null
+          name: string
+          voltage_level?: string | null
+        }
+        Update: {
+          capacity_mva?: number
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          location?: string | null
+          name?: string
+          voltage_level?: string | null
+        }
+        Relationships: []
+      }
+      transmission_data: {
+        Row: {
+          created_at: string | null
+          frequency_hz: number | null
+          id: string
+          load_mw: number
+          losses_percent: number | null
+          recorded_by: string | null
+          status: string | null
+          substation_id: string | null
+          timestamp: string | null
+          voltage_kv: number | null
+        }
+        Insert: {
+          created_at?: string | null
+          frequency_hz?: number | null
+          id?: string
+          load_mw: number
+          losses_percent?: number | null
+          recorded_by?: string | null
+          status?: string | null
+          substation_id?: string | null
+          timestamp?: string | null
+          voltage_kv?: number | null
+        }
+        Update: {
+          created_at?: string | null
+          frequency_hz?: number | null
+          id?: string
+          load_mw?: number
+          losses_percent?: number | null
+          recorded_by?: string | null
+          status?: string | null
+          substation_id?: string | null
+          timestamp?: string | null
+          voltage_kv?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "transmission_data_substation_id_fkey"
+            columns: ["substation_id"]
+            isOneToOne: false
+            referencedRelation: "substations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_roles: {
+        Row: {
+          assigned_at: string | null
+          assigned_by: string | null
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          assigned_at?: string | null
+          assigned_by?: string | null
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          assigned_at?: string | null
+          assigned_by?: string | null
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_user_role: {
+        Args: { _user_id: string }
+        Returns: Database["public"]["Enums"]["app_role"]
+      }
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
+      app_role:
+        | "Chairman"
+        | "Managing Director"
+        | "Director (Generation)"
+        | "Director (Transmission)"
+        | "Director (Distribution)"
+        | "Director (Finance)"
+        | "Director (HR)"
+        | "Director (Planning)"
+        | "GM Generation"
+        | "GM Transmission"
+        | "GM Distribution"
+        | "GM Finance"
+        | "GM HR"
+        | "GM Planning"
+        | "GM Operations"
+        | "GM Maintenance"
+        | "GM IT"
+        | "GM Audit"
+        | "DGM Generation"
+        | "DGM Transmission"
+        | "DGM Distribution"
+        | "DGM Finance"
+        | "DGM HR"
+        | "DGM Planning"
+        | "DGM Operations"
+        | "DGM Maintenance"
+        | "DGM IT"
+        | "AGM Generation"
+        | "AGM Transmission"
+        | "AGM Distribution"
+        | "AGM Finance"
+        | "Chief Engineer"
+        | "Senior Engineer (Electrical)"
+        | "Senior Engineer (Mechanical)"
+        | "Senior Engineer (Civil)"
+        | "Senior Engineer (Control & Instrumentation)"
+        | "Engineer (Electrical)"
+        | "Engineer (Mechanical)"
+        | "Engineer (Civil)"
+        | "Engineer (Control & Instrumentation)"
+        | "Engineer (Electronics)"
+        | "Assistant Engineer (Electrical)"
+        | "Assistant Engineer (Mechanical)"
+        | "Plant Operator"
+        | "Senior Plant Operator"
+        | "Control Room Operator"
+        | "Substation Operator"
+        | "Senior Technician"
+        | "Technician (Electrical)"
+        | "Technician (Mechanical)"
+        | "System Analyst"
+        | "Financial Officer"
+        | "HR Officer"
+        | "Planning Officer"
+        | "Operations Officer"
+        | "Maintenance Officer"
+        | "Safety Officer"
+        | "Security Officer"
+        | "Administrative Assistant"
+        | "Customer"
       department:
         | "GENERATION"
         | "TRANSMISSION"
@@ -286,6 +697,68 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      app_role: [
+        "Chairman",
+        "Managing Director",
+        "Director (Generation)",
+        "Director (Transmission)",
+        "Director (Distribution)",
+        "Director (Finance)",
+        "Director (HR)",
+        "Director (Planning)",
+        "GM Generation",
+        "GM Transmission",
+        "GM Distribution",
+        "GM Finance",
+        "GM HR",
+        "GM Planning",
+        "GM Operations",
+        "GM Maintenance",
+        "GM IT",
+        "GM Audit",
+        "DGM Generation",
+        "DGM Transmission",
+        "DGM Distribution",
+        "DGM Finance",
+        "DGM HR",
+        "DGM Planning",
+        "DGM Operations",
+        "DGM Maintenance",
+        "DGM IT",
+        "AGM Generation",
+        "AGM Transmission",
+        "AGM Distribution",
+        "AGM Finance",
+        "Chief Engineer",
+        "Senior Engineer (Electrical)",
+        "Senior Engineer (Mechanical)",
+        "Senior Engineer (Civil)",
+        "Senior Engineer (Control & Instrumentation)",
+        "Engineer (Electrical)",
+        "Engineer (Mechanical)",
+        "Engineer (Civil)",
+        "Engineer (Control & Instrumentation)",
+        "Engineer (Electronics)",
+        "Assistant Engineer (Electrical)",
+        "Assistant Engineer (Mechanical)",
+        "Plant Operator",
+        "Senior Plant Operator",
+        "Control Room Operator",
+        "Substation Operator",
+        "Senior Technician",
+        "Technician (Electrical)",
+        "Technician (Mechanical)",
+        "System Analyst",
+        "Financial Officer",
+        "HR Officer",
+        "Planning Officer",
+        "Operations Officer",
+        "Maintenance Officer",
+        "Safety Officer",
+        "Security Officer",
+        "Administrative Assistant",
+        "Customer",
+      ],
       department: [
         "GENERATION",
         "TRANSMISSION",
