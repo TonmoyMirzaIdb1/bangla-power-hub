@@ -37,7 +37,7 @@ const App = () => (
             <AuthProvider>
               <Routes>
                 <Route path="/auth" element={<Auth />} />
-                <Route path="/" element={<ProtectedRoute><Index /></ProtectedRoute>} />
+                <Route path="/" element={<Index />} />
                 <Route path="/dashboard/chairman" element={<ProtectedRoute><ChairmanDashboard /></ProtectedRoute>} />
                 <Route path="/dashboard/managing-director" element={<ProtectedRoute><ManagingDirectorDashboard /></ProtectedRoute>} />
                 <Route path="/dashboard/director/generation" element={<ProtectedRoute><DirectorDashboard /></ProtectedRoute>} />

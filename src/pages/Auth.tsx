@@ -84,7 +84,7 @@ export default function Auth() {
           title: "Welcome back!",
           description: "You have successfully logged in.",
         });
-        navigate('/');
+        // Navigation is handled by AuthContext based on user role
       } else {
         const redirectUrl = `${window.location.origin}/`;
         

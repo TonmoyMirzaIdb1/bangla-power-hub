@@ -46,9 +46,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   // Role-based redirect after login
   useEffect(() => {
     if (user && !loading) {
-      supabase.from('user_roles').select('role').eq('user_id', user.id).single().then(({ data }) => {
+      supabase.from('user_roles').select('role').eq('user_id', user.id).single().then(({ data, error }) => {
         const role = data?.role;
-        if (!role) return;
+        if (!role) {
+          // Default to customer dashboard if no role found
+          navigate('/dashboard/customer');
+          return;
+        }
         
         // Executive level
         if (role === 'Chairman') navigate('/dashboard/chairman');
