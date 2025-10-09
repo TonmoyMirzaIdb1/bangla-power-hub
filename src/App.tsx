@@ -23,6 +23,10 @@ import OfficerDashboard from "./pages/dashboards/OfficerDashboard";
 import ChiefEngineerDashboard from "./pages/dashboards/ChiefEngineerDashboard";
 import SystemAnalystDashboard from "./pages/dashboards/SystemAnalystDashboard";
 import TechnicianDashboard from "./pages/dashboards/TechnicianDashboard";
+import UserManagement from "./pages/management/UserManagement";
+import PowerPlantsManagement from "./pages/management/PowerPlantsManagement";
+import SubstationsManagement from "./pages/management/SubstationsManagement";
+import IncidentManagement from "./pages/management/IncidentManagement";
 
 const queryClient = new QueryClient();
 
@@ -38,6 +42,8 @@ const App = () => (
               <Routes>
                 <Route path="/auth" element={<Auth />} />
                 <Route path="/" element={<Index />} />
+                
+                {/* Dashboard Routes */}
                 <Route path="/dashboard/chairman" element={<ProtectedRoute><ChairmanDashboard /></ProtectedRoute>} />
                 <Route path="/dashboard/managing-director" element={<ProtectedRoute><ManagingDirectorDashboard /></ProtectedRoute>} />
                 <Route path="/dashboard/director/generation" element={<ProtectedRoute><DirectorDashboard /></ProtectedRoute>} />
@@ -56,6 +62,13 @@ const App = () => (
                 <Route path="/dashboard/operator/:type" element={<ProtectedRoute><OperatorDashboard /></ProtectedRoute>} />
                 <Route path="/dashboard/officer/:department" element={<ProtectedRoute><OfficerDashboard /></ProtectedRoute>} />
                 <Route path="/dashboard/customer" element={<ProtectedRoute><CustomerDashboard /></ProtectedRoute>} />
+                
+                {/* Management Routes */}
+                <Route path="/management/users" element={<ProtectedRoute><UserManagement /></ProtectedRoute>} />
+                <Route path="/management/power-plants" element={<ProtectedRoute><PowerPlantsManagement /></ProtectedRoute>} />
+                <Route path="/management/substations" element={<ProtectedRoute><SubstationsManagement /></ProtectedRoute>} />
+                <Route path="/management/incidents" element={<ProtectedRoute><IncidentManagement /></ProtectedRoute>} />
+                
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </AuthProvider>

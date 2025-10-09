@@ -23,6 +23,7 @@ interface DataTableProps<T> {
   columns: Column<T>[];
   onRowClick?: (row: T) => void;
   className?: string;
+  isLoading?: boolean;
 }
 
 type SortConfig = {
@@ -35,6 +36,7 @@ export function DataTable<T extends Record<string, any>>({
   columns,
   onRowClick,
   className,
+  isLoading = false,
 }: DataTableProps<T>) {
   const [sortConfig, setSortConfig] = useState<SortConfig>({ key: "", direction: null });
 
@@ -99,7 +101,13 @@ export function DataTable<T extends Record<string, any>>({
           </TableRow>
         </TableHeader>
         <TableBody>
-          {sortedData.length === 0 ? (
+          {isLoading ? (
+            <TableRow>
+              <TableCell colSpan={columns.length} className="h-24 text-center">
+                Loading...
+              </TableCell>
+            </TableRow>
+          ) : sortedData.length === 0 ? (
             <TableRow>
               <TableCell colSpan={columns.length} className="h-24 text-center">
                 No results found.

@@ -24,9 +24,10 @@ const formSchema = z.object({
 interface UserProfileFormProps {
   onSubmit: (data: z.infer<typeof formSchema>) => Promise<void>;
   initialData?: Partial<z.infer<typeof formSchema>>;
+  mode?: "create" | "edit";
 }
 
-export const UserProfileForm = ({ onSubmit, initialData }: UserProfileFormProps) => {
+export const UserProfileForm = ({ onSubmit, initialData, mode = "edit" }: UserProfileFormProps) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: initialData || {},
@@ -35,9 +36,12 @@ export const UserProfileForm = ({ onSubmit, initialData }: UserProfileFormProps)
   const handleSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       await onSubmit(values);
-      toast.success("Profile updated successfully");
+      toast.success(mode === "create" ? "User created successfully" : "Profile updated successfully");
+      if (mode === "create") {
+        form.reset();
+      }
     } catch (error) {
-      toast.error("Failed to update profile");
+      toast.error(mode === "create" ? "Failed to create user" : "Failed to update profile");
     }
   };
 
@@ -101,7 +105,7 @@ export const UserProfileForm = ({ onSubmit, initialData }: UserProfileFormProps)
         />
 
         <Button type="submit" className="w-full">
-          Update Profile
+          {mode === "create" ? "Create User" : "Update Profile"}
         </Button>
       </form>
     </Form>
