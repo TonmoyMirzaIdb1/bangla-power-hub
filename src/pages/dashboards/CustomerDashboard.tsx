@@ -1,127 +1,179 @@
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
-import { DollarSign, FileText, Lightbulb, Clock } from "lucide-react";
+import { DollarSign, FileText, Lightbulb, Clock, Plus } from "lucide-react";
 import { DashboardLayout } from "@/components/DashboardLayout";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
+import { RealtimeLineChart, RealtimeBarChart } from "@/components/common/Charts";
+import { StatusIndicator } from "@/components/common/StatusIndicator";
+import { Badge } from "@/components/ui/badge";
 
 const CustomerDashboard = () => {
   const { t } = useLanguage();
+  const { user } = useAuth();
+  const [bills, setBills] = useState<any[]>([]);
+  const [requests, setRequests] = useState<any[]>([]);
+
+  useEffect(() => {
+    if (!user) return;
+    const fetchData = async () => {
+      const [billsRes, reqRes] = await Promise.all([
+        supabase.from("customer_bills").select("*").eq("customer_id", user.id).order("billing_month", { ascending: false }).limit(12),
+        supabase.from("service_requests").select("*").eq("customer_id", user.id).order("created_at", { ascending: false }).limit(10),
+      ]);
+      setBills(billsRes.data || []);
+      setRequests(reqRes.data || []);
+    };
+    fetchData();
+  }, [user]);
+
+  const pendingRequests = requests.filter(r => r.status === "pending").length;
+  const resolvedRequests = requests.filter(r => r.status === "resolved").length;
+  const latestBill = bills[0];
+  const totalDue = bills.filter(b => !b.paid).reduce((sum, b) => sum + Number(b.amount_bdt), 0);
+
+  const usageData = bills.slice(0, 6).reverse().map(b => ({
+    name: new Date(b.billing_month).toLocaleDateString("en", { month: "short" }),
+    kwh: Number(b.consumption_kwh),
+  }));
+
+  const billData = bills.slice(0, 6).reverse().map(b => ({
+    name: new Date(b.billing_month).toLocaleDateString("en", { month: "short" }),
+    amount: Number(b.amount_bdt),
+  }));
 
   return (
     <DashboardLayout role="Customer">
       <div className="container mx-auto px-4 py-8">
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold text-foreground mb-2">{t('customer.title')}</h1>
+        <div className="mb-6">
+          <h1 className="text-3xl font-bold text-foreground mb-1">{t('customer.title')}</h1>
           <p className="text-muted-foreground">{t('customer.subtitle')}</p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium">{t('customer.currentBill')}</CardTitle>
+              <CardTitle className="text-sm font-medium">Total Due</CardTitle>
               <DollarSign className="h-4 w-4 text-energy" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">৳3,450</div>
-              <p className="text-xs text-muted-foreground">{t('customer.dueBy')} Feb 15, 2025</p>
+              <div className="text-2xl font-bold">৳{totalDue.toLocaleString()}</div>
+              <p className="text-xs text-muted-foreground">{bills.filter(b => !b.paid).length} unpaid bills</p>
             </CardContent>
           </Card>
-
           <Card>
             <CardHeader className="flex flex-row items-center justify-between pb-2">
               <CardTitle className="text-sm font-medium">{t('customer.usage')}</CardTitle>
               <Lightbulb className="h-4 w-4 text-renewable" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">485 kWh</div>
-              <p className="text-xs text-muted-foreground">+12% from last month</p>
+              <div className="text-2xl font-bold">{latestBill ? `${latestBill.consumption_kwh} kWh` : "N/A"}</div>
+              <p className="text-xs text-muted-foreground">Latest billing period</p>
             </CardContent>
           </Card>
-
           <Card>
             <CardHeader className="flex flex-row items-center justify-between pb-2">
               <CardTitle className="text-sm font-medium">{t('customer.serviceRequests')}</CardTitle>
               <FileText className="h-4 w-4 text-primary" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">2</div>
-              <p className="text-xs text-muted-foreground">1 {t('customer.pending')}, 1 {t('customer.completed')}</p>
+              <div className="text-2xl font-bold">{requests.length}</div>
+              <p className="text-xs text-muted-foreground">{pendingRequests} pending, {resolvedRequests} resolved</p>
             </CardContent>
           </Card>
-
           <Card>
             <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium">{t('customer.outageTime')}</CardTitle>
-              <Clock className="h-4 w-4 text-gas" />
+              <CardTitle className="text-sm font-medium">Account Status</CardTitle>
+              <Clock className="h-4 w-4 text-primary" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">2.5 hrs</div>
-              <p className="text-xs text-muted-foreground">{t('customer.thisMonth')}</p>
+              <StatusIndicator status={totalDue > 0 ? "warning" : "operational"} label={totalDue > 0 ? "Payment due" : "All clear"} />
             </CardContent>
           </Card>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>{t('customer.billingHistory')}</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {[
-                  { month: 'January 2025', amount: '৳3,450', status: 'Due' },
-                  { month: 'December 2024', amount: '৳3,180', status: 'Paid' },
-                  { month: 'November 2024', amount: '৳2,950', status: 'Paid' },
-                ].map((bill) => (
-                  <div key={bill.month} className="flex justify-between items-center">
-                    <div>
-                      <p className="font-medium">{bill.month}</p>
-                      <p className="text-sm text-muted-foreground">{bill.amount}</p>
+        <Tabs defaultValue="billing" className="space-y-4">
+          <TabsList className="grid w-full grid-cols-3 lg:w-auto lg:inline-grid">
+            <TabsTrigger value="billing">Billing</TabsTrigger>
+            <TabsTrigger value="usage">Usage</TabsTrigger>
+            <TabsTrigger value="requests">Service Requests</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="billing" className="space-y-4">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <Card>
+                <CardHeader><CardTitle>{t('customer.billingHistory')}</CardTitle></CardHeader>
+                <CardContent>
+                  {bills.length === 0 ? (
+                    <p className="text-muted-foreground text-sm">No billing data yet.</p>
+                  ) : (
+                    <div className="space-y-3">
+                      {bills.slice(0, 6).map((bill) => (
+                        <div key={bill.id} className="flex justify-between items-center p-3 bg-secondary/50 rounded-lg">
+                          <div>
+                            <p className="font-medium text-sm">{new Date(bill.billing_month).toLocaleDateString("en", { month: "long", year: "numeric" })}</p>
+                            <p className="text-xs text-muted-foreground">{bill.consumption_kwh} kWh</p>
+                          </div>
+                          <div className="text-right">
+                            <p className="font-bold text-sm">৳{Number(bill.amount_bdt).toLocaleString()}</p>
+                            <Badge variant={bill.paid ? "default" : "destructive"} className="text-xs">
+                              {bill.paid ? "Paid" : "Due"}
+                            </Badge>
+                          </div>
+                        </div>
+                      ))}
                     </div>
-                    <span className={`text-sm px-3 py-1 rounded-full ${
-                      bill.status === 'Paid' 
-                        ? 'bg-renewable/10 text-renewable' 
-                        : 'bg-energy/10 text-energy-foreground'
-                    }`}>
-                      {t(`customer.${bill.status.toLowerCase()}`)}
-                    </span>
-                  </div>
-                ))}
-              </div>
-              <Button className="w-full mt-4" variant="outline">{t('customer.viewAllBills')}</Button>
-            </CardContent>
-          </Card>
+                  )}
+                </CardContent>
+              </Card>
+              {billData.length > 0 && (
+                <RealtimeBarChart data={billData} title="Bill Amount Trend (৳)" xKey="name" bars={[{ dataKey: "amount", fill: "hsl(var(--primary))", name: "Amount" }]} />
+              )}
+            </div>
+          </TabsContent>
 
-          <Card>
-            <CardHeader>
-              <CardTitle>{t('customer.usageStats')}</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                <div>
-                  <div className="flex justify-between mb-2">
-                    <span className="text-sm">{t('customer.dailyAverage')}</span>
-                    <span className="text-sm font-bold">16.2 kWh</span>
+          <TabsContent value="usage" className="space-y-4">
+            {usageData.length > 0 ? (
+              <RealtimeLineChart data={usageData} title="Consumption History (kWh)" xKey="name" lines={[{ dataKey: "kwh", stroke: "hsl(var(--primary))", name: "kWh" }]} />
+            ) : (
+              <Card><CardContent className="pt-6"><p className="text-muted-foreground text-sm">No usage data available.</p></CardContent></Card>
+            )}
+          </TabsContent>
+
+          <TabsContent value="requests" className="space-y-4">
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between">
+                <CardTitle>Your Service Requests</CardTitle>
+              </CardHeader>
+              <CardContent>
+                {requests.length === 0 ? (
+                  <p className="text-muted-foreground text-sm">No service requests yet.</p>
+                ) : (
+                  <div className="space-y-3">
+                    {requests.map((req) => (
+                      <div key={req.id} className="flex justify-between items-center p-3 bg-secondary/50 rounded-lg">
+                        <div>
+                          <p className="font-medium text-sm">{req.request_type}</p>
+                          <p className="text-xs text-muted-foreground">{req.description?.slice(0, 60) || "No description"}</p>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <Badge variant={req.priority === "urgent" ? "destructive" : "outline"} className="text-xs">{req.priority}</Badge>
+                          <StatusIndicator
+                            status={req.status === "resolved" ? "operational" : req.status === "in_progress" ? "warning" : "maintenance"}
+                            label={req.status}
+                          />
+                        </div>
+                      </div>
+                    ))}
                   </div>
-                  <div className="w-full bg-secondary h-2 rounded-full">
-                    <div className="bg-primary h-2 rounded-full" style={{ width: '75%' }}></div>
-                  </div>
-                </div>
-                <div>
-                  <div className="flex justify-between mb-2">
-                    <span className="text-sm">{t('customer.peakUsage')}</span>
-                    <span className="text-sm font-bold">7-10 PM</span>
-                  </div>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-sm text-muted-foreground">{t('customer.comparison')}</span>
-                  <span className="font-bold text-renewable">-8% Lower</span>
-                </div>
-              </div>
-              <Button className="w-full mt-4" variant="outline">{t('customer.energyTips')}</Button>
-            </CardContent>
-          </Card>
-        </div>
+                )}
+              </CardContent>
+            </Card>
+          </TabsContent>
+        </Tabs>
       </div>
     </DashboardLayout>
   );
